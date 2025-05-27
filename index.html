@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Language Mapping JSON</title>
+</head>
+<body>
+  <h1>System Language Mapping</h1>
+  <pre id="output">Loading...</pre>
+
+  <script>
+    fetch('https://core-lang-variables.vercel.app/api/lang')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById('output').textContent = 'Error loading JSON: ' + error;
+      });
+  </script>
+</body>
+</html>
