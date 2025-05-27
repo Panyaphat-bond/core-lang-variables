@@ -1,13 +1,18 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import fs from 'fs';
 import path from 'path';
+import { promises as fs } from 'fs';
 
-export default function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-    res.status(200).json({
-      message: 'Hello from your JSON API!',
-    });
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  try {
+    const filePath = path.join(process.cwd(), 'core-lang-variables', 'system_language_mapping.json');
+    const fileContents = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(fileContents);
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load JSON file' });
   }
+}
